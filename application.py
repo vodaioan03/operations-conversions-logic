@@ -60,7 +60,7 @@ def option_proceed(option:int):
       return 0
     number_list_two,number_two_is_ok = transform_number(int(number_two), base)
     if not number_two_is_ok:
-      print("You wrote a wrong number. Every digit need to be smaller than base.")
+      print("You wrote a wrong number. Every digit needs to be smaller than base.")
       return 0
   if option == 1:
     addition(base, number_list,number_list_two)
