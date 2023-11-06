@@ -1,12 +1,20 @@
-
-
 def addition(base:int, number:list,number_two:list):
   length_of_number = len(number)
   remaining = 0
   sum_list = []
   for i in range(length_of_number):
     if i >= len(number_two):
-      sum_list.append(number[i::])
+      for j in range(i,length_of_number):
+        sum_of_digit = number[j]+remaining
+        if sum_of_digit >= base:
+          remaining = 1
+          sum_of_digit -= base
+          number[j] = sum_of_digit
+        else:
+          remaining = 0
+          number[j] = sum_of_digit
+        sum_list.append(number[j])
+      break
     sum_of_digit = number[i]+number_two[i]+remaining
     if sum_of_digit >= base:
       remaining = 1
@@ -24,7 +32,33 @@ def addition(base:int, number:list,number_two:list):
   print(final_number)
 
 def subtraction(base:int, number:list, number_two:list):
-  print("")
+  #Doesen't work for number < number_two
+  length_of_number = len(number)
+  subtraction_list = [] 
+  need_number = 0
+  for i in range(length_of_number):
+    if i >=len(number_two):
+      for j in range(i,length_of_number):
+        if need_number == 1 and number[j] == 0:
+          number[j] = base-1
+        elif need_number == 1:
+          number[j] -= 1
+          need_number = 0
+        subtraction_list.append(number[j])
+      break
+    if need_number == 1 and number[i] == 0:
+      number[i] = base-1
+    elif need_number == 1:
+      number[i] -= 1
+      need_number = 0
+    if number[i] < number_two[i]:
+      need_number = 1
+    difference = number[i] + need_number*(base) - number_two[i]
+    subtraction_list.append(difference)
+  final_number = 0
+  for i in range(len(subtraction_list)-1, -1, -1):
+    final_number = final_number * 10 + subtraction_list[i]
+  print(final_number)
 
 def multiplication(base:int, number:list,number_two:list):
   print("")
@@ -94,7 +128,6 @@ def transform_number(number:int,base:int):
       number_ok = 0
       break
     number //= 10
-  print(list_of_number)
   return list_of_number,number_ok
 
 def menu():
