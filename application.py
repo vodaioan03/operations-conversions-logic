@@ -1,4 +1,14 @@
+import colorama 
+from colorama import Fore, Style
+
 def addition(base:int, number:list,number_two:list):
+  """_summary_
+
+  Args:
+      base (int): _description_
+      number (list): _description_
+      number_two (list): _description_
+  """
   length_of_number = len(number)
   remaining = 0
   sum_list = []
@@ -28,10 +38,16 @@ def addition(base:int, number:list,number_two:list):
   final_number = 0
   for i in range(len(sum_list)-1, -1, -1):
     final_number = final_number * 10 + sum_list[i]
-  print(sum_list)
   print(final_number)
 
 def subtraction(base:int, number:list, number_two:list):
+  """_summary_
+
+  Args:
+      base (int): _description_
+      number (list): _description_
+      number_two (list): _description_
+  """
   #Doesen't work for number < number_two
   length_of_number = len(number)
   subtraction_list = [] 
@@ -60,13 +76,46 @@ def subtraction(base:int, number:list, number_two:list):
     final_number = final_number * 10 + subtraction_list[i]
   print(final_number)
 
-def multiplication(base:int, number:list,number_two:list):
-  print("")
+def multiplication(base:int, number:list,number_two:int):
+  """_summary_
+
+  Args:
+      base (int): _description_
+      number (list): _description_
+      number_two (int): _description_
+  """
+  length_of_number = len(number)
+  carry = 0
+  multiplication_list = []
+  for i in range(length_of_number):
+    multiplication = number[i]*number_two + carry # in base 10
+    carry = multiplication // base
+    multiplication_list.append(multiplication%base)
+  if carry > 0:
+    multiplication_list.append(carry)
+  final_number = 0
+  for i in range(len(multiplication_list)-1, -1, -1):
+    final_number = final_number * 10 + multiplication_list[i]
+  print(final_number)
 
 def division(base:int, number:list,number_division:int):
+  """_summary_
+
+  Args:
+      base (int): _description_
+      number (list): _description_
+      number_division (int): _description_
+  """
   print("")
 
-def rapid_conversion(base:int, number:list, base_two:int):
+def proceed_conversion(base:int, number:list, base_two:int):
+  """_summary_
+
+  Args:
+      base (int): _description_
+      number (list): _description_
+      base_two (int): _description_
+  """
   print("")
 
 def option_proceed(option:int):
@@ -77,47 +126,44 @@ def option_proceed(option:int):
   if base.isnumeric():
     base = int(base)
   else:
-    print("Invalid Base! Yo need to write a number\n")
-    return 0
+    raise ValueError("Invalid Base! Yo need to write a number")
   number = input("Type the number: ").strip()
   if not number.isnumeric():
-    print("Invalid number! Type only a number!")
-    return 0
+    raise ValueError("Invalid number! Type only a number!")
   number_list,number_is_ok = transform_number(int(number), base)
   if not number_is_ok:
-    print("You wrote a wrong number. Every digit need to be smaller than base.")
-    return 0
-  if option >=1 and option <=3:
+    raise ValueError("You wrote a wrong number. Every digit need to be smaller than base.")
+  if option >=1 and option <=2:
     number_two = input("Type the number two: ").strip()
     if not number_two.isnumeric():
-      print("Invalid number! Type only a number!")
-      return 0
+      raise ValueError("Invalid number! Type only a number!")
     number_list_two,number_two_is_ok = transform_number(int(number_two), base)
     if not number_two_is_ok:
-      print("You wrote a wrong number. Every digit needs to be smaller than base.")
-      return 0
+      raise ValueError("You wrote a wrong number. Every digit needs to be smaller than base.")
   if option == 1:
     addition(base, number_list,number_list_two)
   elif option == 2:
     subtraction(base, number_list,number_list_two)
   elif option == 3:
-    multiplication(base,number_list,number_list_two)
+    number_multiplication = input("Type a digit: ").strip()
+    if number_multiplication.isdigit():
+      number_multiplication = int(number_multiplication)
+    else:
+      raise ValueError("Invalid number! Yo need to write a digit\n")
+    multiplication(base,number_list,number_multiplication)
   elif option == 4:
     number_division = input("Type a digit: ").strip()
-    if number_division.isalpha():
+    if number_division.isdigit():
       number_division = int(number_division)
     else:
-      print("Invalid number! Yo need to write a digit\n")
-      return 0
+      raise ValueError("Invalid number! Yo need to write a digit\n")
     division(base,number_list,number_division)
   elif option == 5:
     base_two = input("Type the base two: ").strip()
     if not base_two.isnumeric():
-      print("Invalid base! Type only a number!")
-      return 0
+      raise ValueError("Invalid base! Type only a number!")
     base_two = int(base_two)
-    if base in rapid_conversions and base_two in rapid_conversions:
-      rapid_conversion(base, number_list, base_two)
+    proceed_conversion(base, number_list, base_two)
 
 def transform_number(number:int,base:int):
   list_of_number = []
@@ -139,12 +185,18 @@ def menu():
   print("5. Conversion(From base1 to base2)")
   print("6. Close")
   option = input("Choose option: ").strip()
-  if option.isnumeric():
+  if option.isnumeric() and int(option) in [1,2,3,4,5,6]:
     option = int(option)
-    option_proceed(option)
+    try:
+      option_proceed(option)
+    except ValueError as e:
+      print(Fore.RED + "ERROR: " + str(e) + Style.RESET_ALL)
   else:
-    print("Invalid option! Choose between (1-6) \n")
-    return 0
+    raise ValueError("Invalid option! Choose between (1-6) \n")
 
-while True:
-  menu()
+if __name__ == "__main__":
+  while True:
+    try:
+      menu()
+    except ValueError as e:
+      print(Fore.RED + "ERROR: " + str(e) + Style.RESET_ALL)

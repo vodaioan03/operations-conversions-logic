@@ -8,7 +8,7 @@
  ## Progress:
  [I] Addition ✔️ | 05.11.2023 \
  [II] Subtraction ✔️ | 06.11.2023 \
- [III] Multiplication ❌ | \
+ [III] Multiplication ✔️ | 12.11.2023 \
  [IV] Divide ❌ | \
  [V] Conversion ❌ | \
  [VI] Menu ✔️ | 05.11.2023 \
